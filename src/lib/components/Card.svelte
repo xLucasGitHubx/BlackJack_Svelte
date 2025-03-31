@@ -1,8 +1,7 @@
 <script lang="ts">
-	export let imageUrl: string; // URL de l'image de la carte (fourni par l'API)
-	export let altText: string = 'Carte de Blackjack';
+	export let imageUrl: string;
+	export let altText: string = 'Carte';
+	// Optionnellement, d’autres props (valeur, suit, etc.)
 </script>
 
-<div class="h-36 w-24">
-	<img src={imageUrl} alt={altText} class="h-full w-full object-contain" />
-</div>
+<img src={imageUrl} alt={altText} class="h-36 w-24 rounded-md shadow-md" />
