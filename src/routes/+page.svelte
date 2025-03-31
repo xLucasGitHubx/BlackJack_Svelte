@@ -8,7 +8,7 @@
 		dealerScore,
 		dealerHidden,
 		isGameOver,
-		statusMessage,
+		statusMessage
 	} from '../lib/stores/gameStore.js';
 
 	import Navbar from '$lib/components/Navbar.svelte';
@@ -29,37 +29,37 @@
   On centre le contenu avec flex-col, p-4 pour la marge globale.
 -->
 <div
-		class="flex min-h-screen flex-col items-center bg-gradient-to-br from-green-700 via-green-800 to-green-900 p-4 text-white"
+	class="flex min-h-screen flex-col items-center bg-gradient-to-br from-green-700 via-green-800 to-green-900 p-4 text-white"
 >
-	<h1 class="mt-4 text-5xl font-bold tracking-wide drop-shadow-lg">Blackjack</h1>
+	<!-- <h1 class="mt-4 text-5xl font-bold tracking-wide drop-shadow-lg">Blackjack</h1> -->
 
 	<!-- Bouton Nouvelle Partie -->
-	<button
+	<!-- <button
 			on:click={startNewGame}
 			class="mb-8 rounded-lg bg-blue-600 px-6 py-2 text-lg font-semibold shadow-md transition hover:bg-blue-800 focus:ring-2 focus:ring-blue-400 focus:outline-none"
 	>
 		Nouvelle Partie
-	</button>
+	</button> -->
 
 	<!-- Section de jeu -->
 	<div
-			class="flex w-full max-w-5xl flex-col items-center gap-8 lg:flex-row lg:items-start lg:justify-center"
+		class="flex w-full max-w-5xl flex-col items-center gap-8 lg:flex-row lg:items-start lg:justify-center"
 	>
 		<!-- Joueur -->
 		<PlayerArea
-				cards={$playerCards}
-				score={$playerScore}
-				isGameOver={$isGameOver}
-				onHit={hit}
-				onStand={stand}
+			cards={$playerCards}
+			score={$playerScore}
+			isGameOver={$isGameOver}
+			onHit={hit}
+			onStand={stand}
 		/>
 
 		<!-- Croupier -->
 		<DealerArea
-				cards={$dealerCards}
-				score={$dealerScore}
-				hidden={$dealerHidden}
-				isGameOver={$isGameOver}
+			cards={$dealerCards}
+			score={$dealerScore}
+			hidden={$dealerHidden}
+			isGameOver={$isGameOver}
 		/>
 	</div>
 
