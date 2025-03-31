@@ -8,27 +8,29 @@
 	export let isGameOver: boolean = false;
 </script>
 
-<div class="text-center">
-	<h2 class="mb-2 text-2xl">Croupier</h2>
-	<div class="flex justify-center gap-2">
+<!-- Conteneur du croupier -->
+<div class="flex flex-col items-center">
+	<h2 class="mb-3 text-2xl font-semibold tracking-wide drop-shadow-sm">Croupier</h2>
+
+	<div class="flex flex-wrap items-center justify-center gap-2">
 		<!-- Première carte -->
 		{#if cards.length > 0}
-			<Card imageUrl={cards[0].image} altText="dealer-first-card" />
+			<Card imageUrl={cards[0].image} altText="dealer-card-1" />
 		{/if}
 
-		<!-- Deuxième carte (cachée ou non) -->
+		<!-- Deuxième carte (cachée ou visible) -->
 		{#if cards.length > 1}
 			{#if hidden && !isGameOver}
 				<!-- carte face cachée -->
-				<div class="flex h-36 w-24 items-center justify-center rounded-md bg-blue-900 shadow-md">
+				<div class="flex h-36 w-24 items-center justify-center rounded-md bg-blue-800 shadow-md">
 					<span class="font-semibold text-white">???</span>
 				</div>
 			{:else}
-				<Card imageUrl={cards[1].image} altText="dealer-second-card" />
+				<Card imageUrl={cards[1].image} altText="dealer-card-2" />
 			{/if}
 		{/if}
 
-		<!-- Cartes supplémentaires si le croupier en a plus de 2 -->
+		<!-- Cartes supplémentaires (si le croupier en tire d’autres) -->
 		{#if !hidden || isGameOver}
 			{#each cards.slice(2) as extraCard}
 				<Card imageUrl={extraCard.image} altText="dealer-extra-card" />
@@ -36,10 +38,10 @@
 		{/if}
 	</div>
 
-	<!-- Score : affiché seulement si la carte est révélée ou partie finie -->
+	<!-- Score complet seulement quand la carte est révélée ou fin de partie -->
 	{#if !hidden || isGameOver}
-		<p class="mt-2">Score : {score}</p>
+		<p class="mt-2 text-lg">Score : {score}</p>
 	{:else}
-		<p class="mt-2">Score : ???</p>
+		<p class="mt-2 text-lg">Score : ???</p>
 	{/if}
 </div>
