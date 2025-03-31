@@ -1,6 +1,5 @@
-// src/lib/stores/gameStore.ts
-import { writable, get } from 'svelte/store';
-import { createAndShuffleDeck, drawCards } from '../services/deckApi.js'; // Assurez-vous que le chemin est correct
+import { writable, derived, get } from 'svelte/store';
+import { createAndShuffleDeck, drawCards } from '../services/deckApi.js';
 
 // Interface pour typer les cartes
 export interface CardData {
@@ -10,7 +9,7 @@ export interface CardData {
 	value: string;
 }
 
-// 🔓 Stores exportés individuellement
+// ===== Stores classiques =====
 export const deckId = writable('');
 export const playerCards = writable<CardData[]>([]);
 export const dealerCards = writable<CardData[]>([]);
@@ -22,7 +21,18 @@ export const dealerHidden = writable(true);
 export const isGameOver = writable(false);
 export const statusMessage = writable('');
 
-// 🔁 Logique principale
+// ===== Stores globaux pour score de manche =====
+export const playerWins = writable(0);
+export const dealerWins = writable(0);
+
+export const roundsPlayed = derived(
+	[playerWins, dealerWins],
+	([$playerWins, $dealerWins]) => $playerWins + $dealerWins
+);
+
+export const gameEnded = derived(roundsPlayed, ($roundsPlayed) => $roundsPlayed >= 10);
+
+// 🔁 Logique du jeu
 function createGameStore() {
 	function calculateScore(cards: CardData[], hideSecondCard = false) {
 		const relevantCards = hideSecondCard ? [cards[0]] : cards;
@@ -86,6 +96,7 @@ function createGameStore() {
 
 			isGameOver.set(true);
 			statusMessage.set('Vous avez dépassé 21... Perdu !');
+			dealerWins.update((n) => n + 1);
 		}
 	}
 
@@ -120,11 +131,13 @@ function createGameStore() {
 			dealerScore.set(dScore);
 			isGameOver.set(true);
 			statusMessage.set('Blackjack ! Vous gagnez !');
+			playerWins.update((n) => n + 1);
 		} else if (dScore === 21) {
 			dealerHidden.set(false);
 			dealerScore.set(dScore);
 			isGameOver.set(true);
 			statusMessage.set('Le croupier a un Blackjack... Perdu !');
+			dealerWins.update((n) => n + 1);
 		}
 	}
 
@@ -134,19 +147,31 @@ function createGameStore() {
 
 		if (dScore > 21) {
 			statusMessage.set('Le croupier dépasse 21, vous gagnez !');
+			playerWins.update((n) => n + 1);
 		} else if (pScore > dScore) {
 			statusMessage.set('Vous gagnez !');
+			playerWins.update((n) => n + 1);
 		} else if (dScore > pScore) {
 			statusMessage.set('Le croupier gagne !');
+			dealerWins.update((n) => n + 1);
 		} else {
 			statusMessage.set('Égalité !');
 		}
 	}
 
+	function resetMatch() {
+		playerWins.set(0);
+		dealerWins.set(0);
+		statusMessage.set('');
+		isGameOver.set(false);
+		startNewGame();
+	}
+
 	return {
 		startNewGame,
 		hit,
-		stand
+		stand,
+		resetMatch
 	};
 }
 

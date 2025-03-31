@@ -5,40 +5,28 @@
 	export let cards: CardData[] = [];
 	export let score: number = 0;
 	export let isGameOver: boolean = false;
-
-	// Pour la logique Hit/Stand passées en props
 	export let onHit: () => void;
 	export let onStand: () => void;
 </script>
 
-<!-- Conteneur du joueur -->
-<div class="flex flex-col items-center">
-	<h2 class="mb-3 text-2xl font-semibold tracking-wide drop-shadow-sm">Vos cartes</h2>
-
-	<!-- Zone d’affichage des cartes -->
-	<div class="flex flex-wrap items-center justify-center gap-2">
-		{#each cards as card}
-			<Card imageUrl={card.image} altText="player-card" />
+<div class="flex flex-col items-center gap-2">
+	<h2 class="text-2xl font-bold text-white">👤 Joueur</h2>
+	<div class="flex gap-2">
+		{#each cards as c}
+			<Card imageUrl={c.image} altText={c.code} />
 		{/each}
 	</div>
+	<p class="text-white">Score : {score}</p>
 
-	<p class="mt-2 text-lg">Score : {score}</p>
-
-	<!-- Boutons "Hit" et "Stand" (uniquement si la partie n’est pas terminée) -->
 	{#if !isGameOver}
-		<div class="mt-4 flex gap-4">
-			<button
-				class="rounded bg-yellow-600 px-4 py-2 font-medium transition hover:bg-yellow-700"
-				on:click={onHit}
+		<div class="mt-2 flex gap-2">
+			<button on:click={onHit} class="rounded bg-green-600 px-4 py-1 text-white hover:bg-green-800"
+				>Hit</button
 			>
-				Hit
-			</button>
 			<button
-				class="rounded bg-red-600 px-4 py-2 font-medium transition hover:bg-red-700"
 				on:click={onStand}
+				class="rounded bg-yellow-500 px-4 py-1 text-white hover:bg-yellow-700">Stand</button
 			>
-				Stand
-			</button>
 		</div>
 	{/if}
 </div>

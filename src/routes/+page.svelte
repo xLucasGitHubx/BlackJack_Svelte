@@ -1,21 +1,26 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { gameStore } from '../lib/stores/gameStore.js';
+	import Navbar from '$lib/components/Navbar.svelte';
 	import {
+		gameStore,
+		playerWins,
+		dealerWins,
+		roundsPlayed,
+		gameEnded,
+		statusMessage,
+		isGameOver,
 		playerCards,
 		playerScore,
 		dealerCards,
 		dealerScore,
-		dealerHidden,
-		isGameOver,
-		statusMessage
+		dealerHidden
 	} from '../lib/stores/gameStore.js';
 
-	import Navbar from '$lib/components/Navbar.svelte';
 	import PlayerArea from '$lib/components/PlayerArea.svelte';
 	import DealerArea from '$lib/components/DealerArea.svelte';
+	import MultiPlayerArea from '$lib/components/MultiPlayerArea.svelte';
 
-	const { startNewGame, hit, stand } = gameStore;
+	const { startNewGame, hit, stand, resetMatch } = gameStore;
 
 	onMount(() => {
 		startNewGame();
@@ -23,50 +28,57 @@
 </script>
 
 <Navbar />
+<div class="relative flex min-h-screen flex-col items-center bg-green-900 p-4 text-white">
+	<!-- Score top-right -->
+	<div class="absolute top-4 right-4 rounded bg-black/40 p-4 text-sm shadow">
+		<p>👤 Joueur : {$playerWins}</p>
+		<p>🧑‍⚖️ Croupier : {$dealerWins}</p>
+		<p>🧮 Manches : {$roundsPlayed} / 10</p>
 
-<!--
-  Container principal : fond dégradé vert, min-h-screen, etc.
-  On centre le contenu avec flex-col, p-4 pour la marge globale.
--->
-<div
-	class="flex min-h-screen flex-col items-center bg-gradient-to-br from-green-700 via-green-800 to-green-900 p-4 text-white"
->
-	<!-- <h1 class="mt-4 text-5xl font-bold tracking-wide drop-shadow-lg">Blackjack</h1> -->
+		{#if $gameEnded}
+			<p class="mt-2 rounded bg-yellow-400 p-2 font-bold text-black">
+				{#if $playerWins > $dealerWins}
+					🎉 Vous gagnez la partie !
+				{:else if $playerWins < $dealerWins}
+					😢 Le croupier remporte la partie.
+				{:else}
+					🤝 Match nul !
+				{/if}
+			</p>
 
-	<!-- Bouton Nouvelle Partie -->
-	<!-- <button
-			on:click={startNewGame}
-			class="mb-8 rounded-lg bg-blue-600 px-6 py-2 text-lg font-semibold shadow-md transition hover:bg-blue-800 focus:ring-2 focus:ring-blue-400 focus:outline-none"
-	>
-		Nouvelle Partie
-	</button> -->
-
-	<!-- Section de jeu -->
-	<div
-		class="flex w-full max-w-5xl flex-col items-center gap-8 lg:flex-row lg:items-start lg:justify-center"
-	>
-		<!-- Joueur -->
-		<PlayerArea
-			cards={$playerCards}
-			score={$playerScore}
-			isGameOver={$isGameOver}
-			onHit={hit}
-			onStand={stand}
-		/>
-
-		<!-- Croupier -->
-		<DealerArea
-			cards={$dealerCards}
-			score={$dealerScore}
-			hidden={$dealerHidden}
-			isGameOver={$isGameOver}
-		/>
+			<button
+				on:click={resetMatch}
+				class="mt-2 rounded bg-white px-3 py-1 text-black hover:bg-gray-200"
+			>
+				Rejouer
+			</button>
+		{/if}
 	</div>
 
-	<!-- Message de fin -->
+	<h1 class="mb-6 text-4xl font-bold">🃏 Blackjack Multijoueur</h1>
+
+	<!-- Plateau central -->
+	<DealerArea
+		cards={$dealerCards}
+		score={$dealerScore}
+		hidden={$dealerHidden}
+		isGameOver={$isGameOver}
+	/>
+
+	<!-- Multijoueurs en cercle -->
+	<MultiPlayerArea />
+
+	<!-- Zone joueur -->
+	<PlayerArea
+		cards={$playerCards}
+		score={$playerScore}
+		isGameOver={$isGameOver}
+		onHit={hit}
+		onStand={stand}
+	/>
+
+	<!-- Message de fin de manche -->
 	{#if $isGameOver}
-		<p class="mt-6 rounded bg-black/40 px-6 py-3 text-xl shadow-lg">
-			{$statusMessage}
-		</p>
+		<p class="mt-4 rounded bg-black/40 p-2 text-lg">{$statusMessage}</p>
 	{/if}
 </div>

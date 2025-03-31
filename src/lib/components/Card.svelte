@@ -1,11 +1,12 @@
 <script lang="ts">
 	export let imageUrl: string;
-	export let altText: string = 'carte';
+	export let altText: string = '';
+	export let big: boolean = false;
 </script>
 
-<!-- Carte unique, avec un léger zoom au survol -->
 <img
 	src={imageUrl}
 	alt={altText}
-	class="h-36 w-24 rounded-md shadow-md transition-transform hover:scale-105"
+	class="rounded shadow transition-transform hover:scale-105"
+	style={big ? 'width:7rem;height:10rem;' : 'width:5rem;height:7.5rem;'}
 />
