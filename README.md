@@ -176,6 +176,7 @@ npm run db:push
 ## 👨‍💻 Auteur
 
 **Lucas Madjinda**  
+
 3ème année Bachelor Ynov  
 📧 [lucasmadjinda@gmail.com](mailto:lucasmadjinda@gmail.com)
 
