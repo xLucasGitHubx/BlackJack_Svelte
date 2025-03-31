@@ -28,7 +28,6 @@
 	class="flex min-h-screen flex-col items-center bg-gradient-to-br from-green-700 via-green-800 to-green-900 p-4 text-white"
 >
 	<h1 class="mt-4 text-5xl font-bold tracking-wide drop-shadow-lg">Blackjack</h1>
-	<p class="mb-6 text-gray-200 italic">Le plus beau Blackjack en Tailwind&nbsp;!</p>
 
 	<!-- Bouton Nouvelle Partie -->
 	<button
