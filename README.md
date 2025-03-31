@@ -1,58 +1,195 @@
-# Svelte library
+Voici un fichier `README.md` complet, qui intègre **tout ce que tu as fait jusqu’ici**, le **contexte pédagogique**, les **spécifications de la Partie 1**, les **étapes d’installation**, et même l'**historique de setup** (issu de ton terminal) :
 
-Everything you need to build a Svelte library, powered by [`sv`](https://npmjs.com/package/sv).
+---
 
-Read more about creating a library [in the docs](https://svelte.dev/docs/kit/packaging).
+````markdown
+# 🃏 Blackjack Svelte
 
-## Creating a project
+Développement d’un jeu de **Blackjack** en **SvelteKit**, réalisé dans le cadre du **Lab Frontend – RalTech** (YNOV).  
+Ce projet utilise une architecture modulaire et une stack moderne pour aboutir à une **librairie de composants réutilisables**.
 
-If you're seeing this, you've probably already done this step. Congrats!
+---
+
+## 🎓 Contexte pédagogique
+
+Ce projet est la **Partie 1 sur 3** d’un laboratoire de développement web.  
+Il s'inscrit dans une montée en complexité progressive :
+
+1. **Blackjack (solo)** avec API externe – _sans authentification ni BDD_
+2. Ajout de **l’authentification** avec **Lucia**
+3. **Persistance des données** avec **Drizzle ORM** et **MySQL**
+
+📄 Références :
+
+- [Deck of Cards API](https://deckofcardsapi.com/)
+- [Deck RALTech (serveur local)](https://deckofcards.raltech.school/)
+
+---
+
+## 🚀 Stack & outils utilisés
+
+- **SvelteKit** (template `svelte-library` via `npx sv create`)
+- **TypeScript**
+- **TailwindCSS** (avec `typography`, `forms`)
+- **Vitest** pour les tests unitaires
+- **Playwright** pour les tests end-to-end
+- **Lucia Auth** (préparé pour la partie 2)
+- **Drizzle ORM + MySQL + Docker** (préparé pour la partie 3)
+- **Paraglide i18n** (en, fr, es)
+- **Storybook 8.6** (auto-doc + test)
+- **ESLint**, **Prettier**, **mdsvex**
+
+---
+
+## 📦 Setup du projet (terminal)
 
 ```bash
-# create a new project in the current directory
-npx sv create
+# Création du projet
+npx sv create .
 
-# create a new project in my-app
-npx sv create my-app
+# Template choisi : Svelte Library
+# Ajouts : tailwindcss, prettier, eslint, vitest, playwright, drizzle, lucia, mdsvex, paraglide, storybook
+# Plugins Tailwind : typography, forms
+# Adapter SvelteKit : auto
+# Drizzle : MySQL + client mysql2 + Docker local
+# Langues i18n : en, es, fr
+# Storybook : installé avec support test + coverage vitest + playwright
+```
+````
+
+---
+
+## 🎮 Fonctionnalités attendues (Partie 1 - Blackjack)
+
+- 🎴 Intégration de l’API Deck of Cards :
+  - Créer et mélanger un deck
+  - Distribuer 2 cartes au joueur et 2 au croupier (1 face cachée)
+  - Tirer une carte (Hit) ou s’arrêter (Stand)
+- 📏 Règles du Blackjack :
+  - Le croupier tire jusqu’à avoir au moins 17
+  - Valeurs : Figures = 10, As = 1 ou 11
+  - Blackjack = 21 dès la 1ère main
+  - Détection du Bust (> 21)
+  - Comparaison des scores
+- 🖼️ Interface :
+  - Affichage des mains et scores
+  - Rendu visuel avec les **images des cartes**
+  - Boutons interactifs : Hit, Stand, New Game
+  - Animations/transitions légères
+  - Affichage du statut : "Blackjack", "Bust", "Gagné", "Perdu", "Égalité", etc.
+
+---
+
+## 🧠 Bonnes pratiques attendues
+
+- Composants **découplés** et **réutilisables**
+- Architecture **modulaire**
+- Utilisation de **TailwindCSS**
+- Gestion des erreurs API (fetch/axios)
+- **Tests** unitaires (Vitest) et E2E (Playwright)
+- Documentation des composants dans **Storybook**
+
+---
+
+## 📁 Structure du projet
+
+```
+├── src/
+│   ├── lib/             → Composants Svelte réutilisables
+│   ├── lib/api/         → Fonctions d'appel à l’API Deck
+│   ├── routes/          → App de démonstration (game, home, etc.)
+│   └── lib/stores/      → Stores Svelte (état du jeu)
+├── .storybook/          → Config Storybook + vitest.setup.ts
+├── drizzle/             → Schema et migration Drizzle (MySQL)
+├── public/              → Cartes ou assets éventuels
+├── README.md            → Ce fichier 😄
 ```
 
-## Developing
+---
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+## 🛠️ Démarrer le projet
 
 ```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
+npm install
 npm run dev -- --open
 ```
 
-Everything inside `src/lib` is part of your library, everything inside `src/routes` can be used as a showcase or preview app.
-
-## Building
-
-To build your library:
+### 🧪 Lancer les tests
 
 ```bash
+# Tests unitaires
+npm run test
+
+# Tests E2E (Playwright)
+npm run test:e2e
+```
+
+### 📚 Storybook
+
+```bash
+npm run storybook
+```
+
+---
+
+## 📤 Construction & publication
+
+```bash
+# Pour builder la librairie
 npm run package
-```
 
-To create a production version of your showcase app:
-
-```bash
+# Build app de démonstration
 npm run build
+npm run preview
+
+# Publication NPM (modifier le "name" dans package.json)
+npm publish
 ```
 
-You can preview the production build with `npm run preview`.
+---
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+## 📋 Instructions supplémentaires
 
-## Publishing
-
-Go into the `package.json` and give your package the desired name through the `"name"` option. Also consider adding a `"license"` field and point it to a `LICENSE` file which you can create from a template (one popular option is the [MIT license](https://opensource.org/license/mit/)).
-
-To publish your library to [npm](https://www.npmjs.com):
+### Drizzle (ORM)
 
 ```bash
-npm publish
+# Lancer la BDD locale via Docker
+npm run db:start
+
+# Mettre à jour le schéma
+npm run db:push
+```
+
+### Paraglide (i18n)
+
+- Fichiers dans `messages/en.json`, `fr.json`, `es.json`
+- Utiliser `/demo/paraglide` pour tester
+
+---
+
+## 📜 License
+
+[MIT](./LICENSE)
+
+---
+
+## 👨‍💻 Auteur
+
+**Lucas Madjinda**  
+3ème année Bachelor Ynov  
+📧 [lucasmadjinda@gmail.com](mailto:lucasmadjinda@gmail.com)
+
+---
+
+## 📎 Références utiles
+
+- [Deck of Cards API](https://deckofcardsapi.com/)
+- [API RALTech](https://deckofcards.raltech.school/)
+- [SvelteKit](https://kit.svelte.dev/)
+- [TailwindCSS](https://tailwindcss.com/)
+- [Vitest](https://vitest.dev/)
+- [Storybook](https://storybook.js.org/)
+
+```
+
 ```
