@@ -16,8 +16,12 @@
 		dealerScore,
 		dealerHidden,
 		isGameOver,
-		statusMessage
+		statusMessage,
+
+
+
 	} from '../lib/stores/gameStore.js';
+	import Navbar from "$lib/components/Navbar.svelte";
 
 	// Lancer une partie dès le chargement
 	onMount(() => {
@@ -25,7 +29,12 @@
 	});
 </script>
 
+
 <div class="flex min-h-screen flex-col items-center bg-green-900 p-4 text-white">
+
+	<Navbar></Navbar>
+
+
 	<h1 class="my-4 text-4xl font-bold">Blackjack</h1>
 
 	<!-- Bouton Nouvelle Partie -->
