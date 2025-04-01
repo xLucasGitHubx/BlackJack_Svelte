@@ -14,7 +14,7 @@
 		dealerCards,
 		dealerScore,
 		dealerHidden
-	} from '../lib/stores/gameStore.js';
+	} from '$lib/stores/gameStore.js';
 
 	import PlayerArea from '$lib/components/PlayerArea.svelte';
 	import DealerArea from '$lib/components/DealerArea.svelte';
