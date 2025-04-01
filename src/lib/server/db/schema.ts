@@ -1,18 +1,13 @@
-import { mysqlTable, serial, text, int, varchar, datetime } from 'drizzle-orm/mysql-core';
+// src/server/db/schema.ts
+import { mysqlTable, serial, varchar, timestamp } from 'drizzle-orm/mysql-core';
 
-export const user = mysqlTable('user', {
-	id: varchar('id', { length: 255 }).primaryKey(),
-	age: int('age')
+// Table "users"
+export const users = mysqlTable('users', {
+	id: serial('id').primaryKey(),
+	email: varchar('email', { length: 255 }).notNull(),
+	password: varchar('password', { length: 255 }).notNull(),
+	firstName: varchar('first_name', { length: 255 }).notNull().default(''),
+	lastName: varchar('last_name', { length: 255 }).notNull().default(''),
+	createdAt: timestamp('created_at').notNull().defaultNow(),
+	updatedAt: timestamp('updated_at').notNull().defaultNow().onUpdateNow()
 });
-
-export const session = mysqlTable('session', {
-	id: varchar('id', { length: 255 }).primaryKey(),
-	userId: varchar('user_id', { length: 255 })
-		.notNull()
-		.references(() => user.id),
-	expiresAt: datetime('expires_at').notNull()
-});
-
-export type Session = typeof session.$inferSelect;
-
-export type User = typeof user.$inferSelect;

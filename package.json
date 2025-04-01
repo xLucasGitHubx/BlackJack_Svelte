@@ -95,6 +95,7 @@
 		"@inlang/paraglide-js": "^2.0.0",
 		"@oslojs/crypto": "^1.0.1",
 		"@oslojs/encoding": "^1.1.0",
+		"argon2": "^0.41.1",
 		"drizzle-orm": "^0.40.0",
 		"jsonwebtoken": "^9.0.2",
 		"mysql2": "^3.12.0",

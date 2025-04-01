@@ -1,55 +1,55 @@
-// src/routes/login/+page.server.ts
 import type { Actions, ServerLoad } from '@sveltejs/kit';
 import { fail, redirect } from '@sveltejs/kit';
 import { env } from '$env/dynamic/private';
 import jwt from 'jsonwebtoken';
+import { loginUser } from '../../lib/server/auth.js';
 
-// Si l’utilisateur est déjà loggué, on le renvoie ailleurs
 export const load: ServerLoad = async ({ locals }) => {
 	if (locals.user) {
-		throw redirect(302, '/'); // Page d'accueil ou autre
+		throw redirect(302, '/game');
 	}
-	return {};
 };
 
 export const actions: Actions = {
 	default: async ({ request, cookies }) => {
 		const formData = await request.formData();
-		const email = formData.get('email') as string;
-		const password = formData.get('password') as string;
+		const email = (formData.get('email') ?? '').toString().trim();
+		const password = (formData.get('password') ?? '').toString();
 
-		// Vérifications basiques
 		if (!email || !password) {
-			return fail(400, {
-				error: 'Veuillez renseigner un email et un mot de passe.'
-			});
+			return fail(400, { error: 'Email et mot de passe requis.' });
 		}
 
-		// TODO: Vérifier l’utilisateur en BD. Ici, on mocke :
-		const user = { email: 'test@example.com', password: 'secret' };
-		if (email !== user.email || password !== user.password) {
+		// 1. Vérifie en BD
+		const user = await loginUser(email, password);
+		if (!user) {
 			return fail(401, { error: 'Identifiants invalides.' });
 		}
 
-		// Connexion OK => on génère un token
+		// 2. Génère le token
+		if (!env.JWT_SECRET) {
+			throw new Error('JWT_SECRET manquant');
+		}
 		const token = jwt.sign(
 			{
-				email: user.email
+				email: user.email,
+				firstName: user.firstName,
+				lastName: user.lastName
 			},
 			env.JWT_SECRET,
 			{ expiresIn: '1h' }
 		);
 
-		// On enregistre le token dans un cookie
+		// 3. Stocke le token
 		cookies.set('jwt', token, {
 			path: '/',
 			httpOnly: true,
 			sameSite: 'strict',
-			secure: false, // mettre true en https prod
+			secure: false,
 			maxAge: 3600
 		});
 
-		// On redirige vers la page d'accueil (ou une autre page)
+		// 4. Redirection finale
 		throw redirect(302, '/game');
 	}
 };
