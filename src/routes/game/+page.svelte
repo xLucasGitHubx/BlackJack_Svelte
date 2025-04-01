@@ -1,3 +1,4 @@
+<!-- src/routes/+page.svelte -->
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import Navbar from '$lib/components/Navbar.svelte';
@@ -14,7 +15,7 @@
 		dealerCards,
 		dealerScore,
 		dealerHidden
-	} from '../lib/stores/gameStore.js';
+	} from '$lib/stores/gameStore.js';
 
 	import PlayerArea from '$lib/components/PlayerArea.svelte';
 	import DealerArea from '$lib/components/DealerArea.svelte';
@@ -57,10 +58,7 @@
 
 	<h1 class="mb-6 text-4xl font-bold">🃏 Blackjack Multijoueur</h1>
 
-	<!-- Multijoueurs en cercle -->
 	<MultiPlayerArea />
-
-	<!-- Plateau central -->
 
 	<DealerArea
 		cards={$dealerCards}
@@ -69,7 +67,6 @@
 		isGameOver={$isGameOver}
 	/>
 
-	<!-- Zone joueur -->
 	<PlayerArea
 		cards={$playerCards}
 		score={$playerScore}
@@ -78,7 +75,6 @@
 		onStand={stand}
 	/>
 
-	<!-- Message de fin de manche -->
 	{#if $isGameOver}
 		<p class="mt-4 rounded bg-black/40 p-2 text-lg">{$statusMessage}</p>
 	{/if}

@@ -1,37 +1,25 @@
-import { sequence } from '@sveltejs/kit/hooks';
-import * as auth from '$lib/server/auth.js';
+// src/hooks.server.ts
 import type { Handle } from '@sveltejs/kit';
-import { paraglideMiddleware } from '$lib/paraglide/server';
+import { env } from '$env/dynamic/private';
+import jwt from 'jsonwebtoken';
 
-const handleParaglide: Handle = ({ event, resolve }) =>
-	paraglideMiddleware(event.request, ({ request, locale }) => {
-		event.request = request;
-
-		return resolve(event, {
-			transformPageChunk: ({ html }) => html.replace('%paraglide.lang%', locale)
-		});
-	});
-
-const handleAuth: Handle = async ({ event, resolve }) => {
-	const sessionToken = event.cookies.get(auth.sessionCookieName);
-
-	if (!sessionToken) {
-		event.locals.user = null;
-		event.locals.session = null;
-		return resolve(event);
-	}
-
-	const { session, user } = await auth.validateSessionToken(sessionToken);
-
-	if (session) {
-		auth.setSessionTokenCookie(event, sessionToken, session.expiresAt);
+export const handle: Handle = async ({ event, resolve }) => {
+	const token = event.cookies.get('jwt');
+	if (token) {
+		try {
+			const user = jwt.verify(token, env.JWT_SECRET) as {
+				email: string;
+				firstName?: string;
+				lastName?: string;
+			};
+			event.locals.user = user;
+		} catch (err) {
+			// Token invalide/expiré => on vide user
+			event.locals.user = null;
+		}
 	} else {
-		auth.deleteSessionTokenCookie(event);
+		event.locals.user = null;
 	}
 
-	event.locals.user = user;
-	event.locals.session = session;
-	return resolve(event);
+	return await resolve(event);
 };
-
-export const handle: Handle = sequence(handleParaglide, handleAuth);
