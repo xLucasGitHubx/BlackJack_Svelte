@@ -9,7 +9,7 @@
 	export let onStand: () => void;
 </script>
 
-<div class="flex flex-col items-center gap-2">
+<div class="mt-3.5 flex flex-col items-center gap-2">
 	<h2 class="text-2xl font-bold text-white">👤 Joueur</h2>
 	<div class="flex gap-2">
 		{#each cards as c}

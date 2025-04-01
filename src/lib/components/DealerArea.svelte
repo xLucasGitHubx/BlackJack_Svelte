@@ -9,7 +9,7 @@
 </script>
 
 <!-- Conteneur du croupier -->
-<div class="flex flex-col items-center">
+<div class="mt-6 flex flex-col items-center">
 	<h2 class="mb-3 text-2xl font-semibold tracking-wide text-yellow-300 drop-shadow-sm">
 		🧑‍⚖️ Croupier
 	</h2>

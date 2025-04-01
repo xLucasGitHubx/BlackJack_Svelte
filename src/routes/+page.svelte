@@ -57,16 +57,17 @@
 
 	<h1 class="mb-6 text-4xl font-bold">🃏 Blackjack Multijoueur</h1>
 
+	<!-- Multijoueurs en cercle -->
+	<MultiPlayerArea />
+
 	<!-- Plateau central -->
+
 	<DealerArea
 		cards={$dealerCards}
 		score={$dealerScore}
 		hidden={$dealerHidden}
 		isGameOver={$isGameOver}
 	/>
-
-	<!-- Multijoueurs en cercle -->
-	<MultiPlayerArea />
 
 	<!-- Zone joueur -->
 	<PlayerArea

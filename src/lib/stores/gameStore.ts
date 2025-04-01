@@ -1,5 +1,6 @@
 import { writable, derived, get } from 'svelte/store';
 import { createAndShuffleDeck, drawCards } from '../services/deckApi.js';
+import { players } from './playersStore.js'; // Importation du store des joueurs
 
 // Interface pour typer les cartes
 export interface CardData {
@@ -66,17 +67,27 @@ function createGameStore() {
 		const newDeckId = await createAndShuffleDeck();
 		deckId.set(newDeckId);
 
-		const drawn = await drawCards(newDeckId, 4);
-		const pCards = [drawn[0], drawn[1]];
-		const dCards = [drawn[2], drawn[3]];
+		// 🔁 1. Distribuer aux joueurs multijoueurs
+		const updatedPlayers = get(players).map((p) => ({ ...p, cards: [], score: 0 }));
+		for (let i = 0; i < updatedPlayers.length; i++) {
+			const cards = await drawCards(newDeckId, 2);
+			updatedPlayers[i].cards = cards;
+			updatedPlayers[i].score = calculateScore(cards);
+		}
+		players.set(updatedPlayers); // mise à jour du store
 
-		playerCards.set(pCards);
-		dealerCards.set(dCards);
+		// 🔁 2. Distribuer au joueur principal
+		const playerHand = await drawCards(newDeckId, 2);
+		playerCards.set(playerHand);
+		playerScore.set(calculateScore(playerHand));
 
-		playerScore.set(calculateScore(pCards));
-		dealerScore.set(calculateScore(dCards, true));
+		// 🔁 3. Distribuer au croupier
+		const dealerHand = await drawCards(newDeckId, 2);
+		dealerCards.set(dealerHand);
+		dealerScore.set(calculateScore(dealerHand, true));
 
-		checkForBlackjack(pCards, dCards);
+		// Vérification du blackjack
+		checkForBlackjack(playerHand, dealerHand);
 	}
 
 	async function hit() {
