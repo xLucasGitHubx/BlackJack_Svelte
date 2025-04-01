@@ -15,13 +15,15 @@
 	<!-- Logo -->
 	<div class="flex items-center space-x-2">
 		<img src={logoSrc} alt="Logo" class="h-10 w-10 object-contain" />
-		<span class="text-xl font-semibold">Blackjack</span>
+		<span class="text-xl font-semibold">MonBlackjack</span>
 	</div>
 
 	<!-- Navigation -->
 	<div class="hidden space-x-4 sm:flex">
-		<a href="/" class="transition hover:text-yellow-400">Accueil</a>
+		<a href="/homePage" class="transition hover:text-yellow-400">Accueil</a>
+		<a href="/login" class="transition hover:text-yellow-400">Classement</a>
 		<a href="/login" class="transition hover:text-yellow-400">Connexion</a>
+
 		<button
 			on:click={startNewGame}
 			class="rounded bg-yellow-500 px-3 py-1 font-semibold text-black hover:bg-yellow-600"
