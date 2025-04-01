@@ -1,13 +1,13 @@
 services:
   db:
-    image: mysql
+    image: mysql:8.0
     restart: always
+    env_file:
+      - .env
     ports:
-      - 3306:3306
-    environment:
-      MYSQL_ROOT_PASSWORD: mysecretpassword
-      MYSQL_DATABASE: local
+      - '3306:3306'
     volumes:
-      - mysqldata:/var/lib/mysql
+      - mysql_data:/var/lib/mysql
+
 volumes:
-  mysqldata:
+  mysql_data:
