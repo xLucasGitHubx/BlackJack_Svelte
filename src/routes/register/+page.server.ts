@@ -45,6 +45,6 @@ export const actions: Actions = {
 			maxAge: 3600
 		});
 
-		throw redirect(302, '/');
+		throw redirect(302, '/game');
 	}
 };

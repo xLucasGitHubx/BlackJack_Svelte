@@ -50,6 +50,6 @@ export const actions: Actions = {
 		});
 
 		// On redirige vers la page d'accueil (ou une autre page)
-		throw redirect(302, '/');
+		throw redirect(302, '/game');
 	}
 };

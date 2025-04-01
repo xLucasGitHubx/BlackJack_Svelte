@@ -1,10 +1,12 @@
 <script lang="ts">
-	export let logoSrc: string = '/logo_blackjack.png';
+	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
-
 	import { gameStore } from '../stores/gameStore.js';
 
-	const { startNewGame, hit, stand } = gameStore;
+	export let logoSrc: string = '/logo_blackjack.png';
+
+	const { startNewGame } = gameStore;
+	$: currentPath = $page.url.pathname;
 
 	onMount(() => {
 		startNewGame();
@@ -19,10 +21,20 @@
 	</div>
 
 	<!-- Navigation -->
-	<div class="hidden space-x-4 sm:flex">
+	<div class="hidden items-center space-x-4 sm:flex">
 		<a href="/homePage" class="transition hover:text-yellow-400">Accueil</a>
 		<a href="/login" class="transition hover:text-yellow-400">Classement</a>
-		<a href="/login" class="transition hover:text-yellow-400">Connexion</a>
+
+		{#if currentPath !== '/game'}
+			<a href="/login" class="transition hover:text-yellow-400">Connexion</a>
+		{/if}
+
+		<form method="post" action="/logout">
+			<!-- Harmonisé avec les liens, mais en rouge -->
+			<button type="submit" class="font-semibold text-red-500 transition hover:text-red-400">
+				Se déconnecter
+			</button>
+		</form>
 
 		<button
 			on:click={startNewGame}
