@@ -176,9 +176,10 @@ npm run db:push
 ## 👨‍💻 Auteur
 
 **Lucas Madjinda**  
-
+**Junior Chimene**
 3ème année Bachelor Ynov  
-📧 [lucasmadjinda@gmail.com](mailto:lucasmadjinda@gmail.com)
+📧 [Lucas Madjinda](mailto:lucasmadjinda@gmail.com)
+📧 [Junior Chimene](mailto:cammonp@outlook.fr)
 
 ---
 
