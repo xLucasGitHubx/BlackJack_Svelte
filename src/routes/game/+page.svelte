@@ -101,8 +101,16 @@
 		onHit={hit}
 		onStand={stand}
 	/>
-
+	
 	{#if $isGameOver}
 		<p class="mt-4 rounded bg-black/40 p-2 text-lg">{$statusMessage}</p>
 	{/if}
+
+	<button
+			on:click={startNewGame}
+			class="rounded bg-yellow-500 px-3 mt-4 py-1 font-semibold text-black hover:bg-yellow-600"
+		>
+			Nouvelle Partie
+		</button>
+
 </div>

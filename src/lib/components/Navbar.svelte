@@ -36,11 +36,11 @@
 			</button>
 		</form>
 
-		<button
+		<!-- <button
 			on:click={startNewGame}
 			class="rounded bg-yellow-500 px-3 py-1 font-semibold text-black hover:bg-yellow-600"
 		>
 			Nouvelle Partie
-		</button>
+		</button> -->
 	</div>
 </nav>
