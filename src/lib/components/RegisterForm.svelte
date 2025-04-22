@@ -4,9 +4,9 @@
 	export let form;
 </script>
 
-<div class="flex min-h-screen items-center justify-center bg-gray-100 px-6 py-16">
-	<div class="w-full max-w-md space-y-12 rounded-2xl bg-white p-12 shadow-2xl">
-		<h2 class="text-center text-3xl font-bold tracking-tight text-gray-900">Créer un compte</h2>
+<div class="flex min-h-screen items-center justify-center bg-green-800 px-6 py-16">
+<div class="w-full max-w-md space-y-12 rounded-2xl bg-white p-12 border-4 border-black shadow-2xl">
+        <h2 class="text-center text-3xl font-bold tracking-wide text-black">♠ Créer un compte ♣</h2>
 
 		<!-- method="post" => déclenche l'action "default" côté serveur -->
 		<form method="post" class="space-y-8">
@@ -72,7 +72,7 @@
 
 			<button
 				type="submit"
-				class="w-full bg-blue-600 py-3 font-semibold text-white hover:bg-blue-700"
+class="w-full bg-red-600 py-3 font-semibold text-white hover:bg-red-700 focus:ring-2 focus:ring-red-400 focus:outline-none rounded-md"
 			>
 				S'inscrire
 			</button>

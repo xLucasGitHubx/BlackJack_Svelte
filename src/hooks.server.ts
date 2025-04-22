@@ -8,13 +8,19 @@ export const handle: Handle = async ({ event, resolve }) => {
 	if (token) {
 		try {
 			const user = jwt.verify(token, env.JWT_SECRET) as {
+				id: number;
 				email: string;
 				firstName?: string;
 				lastName?: string;
 			};
-			event.locals.user = user;
+
+			event.locals.user = {
+				id: user.id,
+				email: user.email,
+				firstName: user.firstName,
+				lastName: user.lastName
+			};
 		} catch (err) {
-			// Token invalide/expiré => on vide user
 			event.locals.user = null;
 		}
 	} else {

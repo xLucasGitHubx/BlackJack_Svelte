@@ -6,8 +6,5 @@
 	};
 </script>
 
-<div
-	class="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-900 to-black px-4 py-12"
->
+
 	<LoginForm form={null} on:login={handleLogin} />
-</div>

@@ -29,15 +29,20 @@ export async function registerUser({
 	const hashedPassword = await argon2.hash(password);
 
 	// Insertion
-	const result = await db.insert(users).values({
+	await db.insert(users).values({
 		email,
 		password: hashedPassword,
 		firstName: firstName ?? '',
 		lastName: lastName ?? ''
 	});
 
-	// result : contient un résultat d'insertion (ex : { insertId: ... })
-	return result;
+	// ✅ Requête de retour pour récupérer l'utilisateur avec son id
+	const [newUser] = await db
+		.select()
+		.from(users)
+		.where(eq(users.email, email));
+
+	return newUser;
 }
 
 /**

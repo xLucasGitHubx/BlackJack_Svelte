@@ -24,18 +24,26 @@ export const actions: Actions = {
 		}
 
 		try {
-			// 1. Création BD
-			await registerUser({ email, password, firstName, lastName });
+			// ✅ Crée l'utilisateur et récupère son ID
+			const user = await registerUser({ email, password, firstName, lastName });
 
-			// 2. Génère un token JWT
 			if (!env.JWT_SECRET) {
 				throw new Error('JWT_SECRET manquant');
 			}
-			const token = jwt.sign({ email, firstName, lastName }, env.JWT_SECRET, {
-				expiresIn: '1h'
-			});
 
-			// 3. Set cookie
+			// ✅ Génère un JWT AVEC l'id
+			const token = jwt.sign(
+				{
+					id: user.id,
+					email: user.email,
+					firstName: user.firstName,
+					lastName: user.lastName
+				},
+				env.JWT_SECRET,
+				{ expiresIn: '1h' }
+			);
+
+			// ✅ Stocke le token
 			cookies.set('jwt', token, {
 				path: '/',
 				httpOnly: true,
@@ -44,7 +52,7 @@ export const actions: Actions = {
 				maxAge: 3600
 			});
 
-			throw redirect(302, '/game'); // par ex, on redirige vers le jeu
+			throw redirect(302, '/game');
 		} catch (err: any) {
 			console.error('Register error:', err);
 			return fail(400, { error: err.message ?? 'Erreur serveur.' });

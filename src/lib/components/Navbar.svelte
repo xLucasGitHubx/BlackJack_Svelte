@@ -23,7 +23,7 @@
 	<!-- Navigation -->
 	<div class="hidden items-center space-x-4 sm:flex">
 		<a href="/homePage" class="transition hover:text-yellow-400">Accueil</a>
-		<a href="/login" class="transition hover:text-yellow-400">Classement</a>
+		<a href="/rank" class="transition hover:text-yellow-400">Classement</a>
 
 		{#if currentPath !== '/game'}
 			<a href="/login" class="transition hover:text-yellow-400">Connexion</a>

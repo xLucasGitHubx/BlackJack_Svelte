@@ -32,6 +32,7 @@ export const actions: Actions = {
 		}
 		const token = jwt.sign(
 			{
+				id: user.id,
 				email: user.email,
 				firstName: user.firstName,
 				lastName: user.lastName

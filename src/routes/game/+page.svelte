@@ -1,4 +1,3 @@
-<!-- src/routes/+page.svelte -->
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import Navbar from '$lib/components/Navbar.svelte';
@@ -23,12 +22,37 @@
 
 	const { startNewGame, hit, stand, resetMatch } = gameStore;
 
+	let winIncremented = false;
+
 	onMount(() => {
 		startNewGame();
 	});
+
+	// ✅ Déclencher l’incrément si le joueur gagne une manche
+	$: if (
+		$isGameOver &&
+		$playerScore > $dealerScore &&
+		!winIncremented
+	) {
+		fetch('/api/user/win', {
+			method: 'POST'
+		})
+			.then((res) => {
+				if (res.ok) {
+					console.log('🏆 Manche gagnée enregistrée !');
+					winIncremented = true;
+				} else {
+					console.warn('❌ Échec enregistrement victoire');
+				}
+			})
+			.catch((err) => {
+				console.error('Erreur réseau :', err);
+			});
+	}
 </script>
 
 <Navbar />
+
 <div class="relative flex min-h-screen flex-col items-center bg-green-900 p-4 text-white">
 	<!-- Score top-right -->
 	<div class="absolute top-4 right-4 rounded bg-black/40 p-4 text-sm shadow">
@@ -48,7 +72,10 @@
 			</p>
 
 			<button
-				on:click={resetMatch}
+				on:click={() => {
+					resetMatch();
+					winIncremented = false; // reset pour prochaine manche
+				}}
 				class="mt-2 rounded bg-white px-3 py-1 text-black hover:bg-gray-200"
 			>
 				Rejouer
