@@ -1,8 +1,12 @@
 <script lang="ts">
-	export let imageUrl: string; // URL de l'image de la carte (fourni par l'API)
-	export let altText: string = 'Carte de Blackjack';
+	export let imageUrl: string;
+	export let altText: string = '';
+	export let big: boolean = false;
 </script>
 
-<div class="h-36 w-24">
-	<img src={imageUrl} alt={altText} class="h-full w-full object-contain" />
-</div>
+<img
+	src={imageUrl}
+	alt={altText}
+	class="rounded shadow transition-transform hover:scale-105"
+	style={big ? 'width:7rem;height:10rem;' : 'width:5rem;height:7.5rem;'}
+/>

@@ -31,12 +31,7 @@ Il s'inscrit dans une montée en complexité progressive :
 - **SvelteKit** (template `svelte-library` via `npx sv create`)
 - **TypeScript**
 - **TailwindCSS** (avec `typography`, `forms`)
-- **Vitest** pour les tests unitaires
-- **Playwright** pour les tests end-to-end
-- **Lucia Auth** (préparé pour la partie 2)
 - **Drizzle ORM + MySQL + Docker** (préparé pour la partie 3)
-- **Paraglide i18n** (en, fr, es)
-- **Storybook 8.6** (auto-doc + test)
 - **ESLint**, **Prettier**, **mdsvex**
 
 ---
@@ -48,12 +43,10 @@ Il s'inscrit dans une montée en complexité progressive :
 npx sv create .
 
 # Template choisi : Svelte Library
-# Ajouts : tailwindcss, prettier, eslint, vitest, playwright, drizzle, lucia, mdsvex, paraglide, storybook
+# Ajouts : tailwindcss, prettier, eslint, vitest, playwright, drizzle, lucia, mdsvex
 # Plugins Tailwind : typography, forms
 # Adapter SvelteKit : auto
 # Drizzle : MySQL + client mysql2 + Docker local
-# Langues i18n : en, es, fr
-# Storybook : installé avec support test + coverage vitest + playwright
 ```
 ````
 
@@ -86,8 +79,6 @@ npx sv create .
 - Architecture **modulaire**
 - Utilisation de **TailwindCSS**
 - Gestion des erreurs API (fetch/axios)
-- **Tests** unitaires (Vitest) et E2E (Playwright)
-- Documentation des composants dans **Storybook**
 
 ---
 
@@ -112,22 +103,6 @@ npx sv create .
 ```bash
 npm install
 npm run dev -- --open
-```
-
-### 🧪 Lancer les tests
-
-```bash
-# Tests unitaires
-npm run test
-
-# Tests E2E (Playwright)
-npm run test:e2e
-```
-
-### 📚 Storybook
-
-```bash
-npm run storybook
 ```
 
 ---
@@ -160,25 +135,14 @@ npm run db:start
 npm run db:push
 ```
 
-### Paraglide (i18n)
-
-- Fichiers dans `messages/en.json`, `fr.json`, `es.json`
-- Utiliser `/demo/paraglide` pour tester
-
----
-
-## 📜 License
-
-[MIT](./LICENSE)
-
----
 
 ## 👨‍💻 Auteur
 
 **Lucas Madjinda**  
-
+**Junior Chimene**
 3ème année Bachelor Ynov  
-📧 [lucasmadjinda@gmail.com](mailto:lucasmadjinda@gmail.com)
+📧 [Lucas Madjinda](mailto:lucasmadjinda@gmail.com)
+📧 [Junior Chimene](mailto:cammonp@outlook.fr)
 
 ---
 
@@ -188,8 +152,6 @@ npm run db:push
 - [API RALTech](https://deckofcards.raltech.school/)
 - [SvelteKit](https://kit.svelte.dev/)
 - [TailwindCSS](https://tailwindcss.com/)
-- [Vitest](https://vitest.dev/)
-- [Storybook](https://storybook.js.org/)
 
 ```
 

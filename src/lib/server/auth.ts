@@ -1,81 +1,73 @@
-import type { RequestEvent } from '@sveltejs/kit';
-import { eq } from 'drizzle-orm';
-import { sha256 } from '@oslojs/crypto/sha2';
-import { encodeBase64url, encodeHexLowerCase } from '@oslojs/encoding';
-import { db } from '$lib/server/db';
-import * as table from '$lib/server/db/schema';
+// src/server/db/auth.ts
+import { db } from './db/index.js'; // On réutilise l'instance Drizzle
+import { users } from './db/schema.js'; // Accès à la table "users"
+import { eq } from 'drizzle-orm'; // Pour construire la clause WHERE
+import argon2 from 'argon2';
 
-const DAY_IN_MS = 1000 * 60 * 60 * 24;
+/**
+ * Créer un utilisateur + hacher le mot de passe
+ */
+export async function registerUser({
+	email,
+	password,
+	firstName,
+	lastName
+}: {
+	email: string;
+	password: string;
+	firstName?: string;
+	lastName?: string;
+}) {
+	// Vérifier si un user existe déjà
+	const [existing] = await db.select().from(users).where(eq(users.email, email));
 
-export const sessionCookieName = 'auth-session';
-
-export function generateSessionToken() {
-	const bytes = crypto.getRandomValues(new Uint8Array(18));
-	const token = encodeBase64url(bytes);
-	return token;
-}
-
-export async function createSession(token: string, userId: string) {
-	const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
-	const session: table.Session = {
-		id: sessionId,
-		userId,
-		expiresAt: new Date(Date.now() + DAY_IN_MS * 30)
-	};
-	await db.insert(table.session).values(session);
-	return session;
-}
-
-export async function validateSessionToken(token: string) {
-	const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
-	const [result] = await db
-		.select({
-			// Adjust user table here to tweak returned data
-			user: { id: table.user.id, username: table.user.username },
-			session: table.session
-		})
-		.from(table.session)
-		.innerJoin(table.user, eq(table.session.userId, table.user.id))
-		.where(eq(table.session.id, sessionId));
-
-	if (!result) {
-		return { session: null, user: null };
-	}
-	const { session, user } = result;
-
-	const sessionExpired = Date.now() >= session.expiresAt.getTime();
-	if (sessionExpired) {
-		await db.delete(table.session).where(eq(table.session.id, session.id));
-		return { session: null, user: null };
+	if (existing) {
+		throw new Error('Un utilisateur avec cet email existe déjà');
 	}
 
-	const renewSession = Date.now() >= session.expiresAt.getTime() - DAY_IN_MS * 15;
-	if (renewSession) {
-		session.expiresAt = new Date(Date.now() + DAY_IN_MS * 30);
-		await db
-			.update(table.session)
-			.set({ expiresAt: session.expiresAt })
-			.where(eq(table.session.id, session.id));
-	}
+	// Hachage du mot de passe
+	const hashedPassword = await argon2.hash(password);
 
-	return { session, user };
-}
-
-export type SessionValidationResult = Awaited<ReturnType<typeof validateSessionToken>>;
-
-export async function invalidateSession(sessionId: string) {
-	await db.delete(table.session).where(eq(table.session.id, sessionId));
-}
-
-export function setSessionTokenCookie(event: RequestEvent, token: string, expiresAt: Date) {
-	event.cookies.set(sessionCookieName, token, {
-		expires: expiresAt,
-		path: '/'
+	// Insertion
+	await db.insert(users).values({
+		email,
+		password: hashedPassword,
+		firstName: firstName ?? '',
+		lastName: lastName ?? ''
 	});
+
+	// ✅ Requête de retour pour récupérer l'utilisateur avec son id
+	const [newUser] = await db
+		.select()
+		.from(users)
+		.where(eq(users.email, email));
+
+	return newUser;
 }
 
-export function deleteSessionTokenCookie(event: RequestEvent) {
-	event.cookies.delete(sessionCookieName, {
-		path: '/'
-	});
+/**
+ * Récupérer un user par email
+ */
+export async function findUserByEmail(email: string) {
+	const [user] = await db.select().from(users).where(eq(users.email, email));
+
+	return user || null;
+}
+
+/**
+ * Vérifier (login) => compare mot de passe clair vs haché
+ */
+export async function loginUser(email: string, password: string) {
+	const user = await findUserByEmail(email);
+	if (!user) {
+		return null; // email inconnu
+	}
+
+	// Comparaison du hash
+	const match = await argon2.verify(user.password, password);
+	if (!match) {
+		return null; // mot de passe invalide
+	}
+
+	return user; // renvoie l'objet complet
 }
