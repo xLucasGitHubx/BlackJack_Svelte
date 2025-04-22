@@ -1,3 +1,5 @@
+<!-- POUR PLUS TARD ET EMMENER LE PROJET PLUS LOIN -->
+
 <script lang="ts">
 	import Card from './Card.svelte';
 	import { players } from '../stores/playersStore.js';

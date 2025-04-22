@@ -28,7 +28,6 @@
 		startNewGame();
 	});
 
-	// ✅ Déclencher l’incrément si le joueur gagne une manche
 	$: if (
 		$isGameOver &&
 		$playerScore > $dealerScore &&
@@ -51,66 +50,68 @@
 	}
 </script>
 
-<Navbar />
+<!-- Structure principale -->
+<div class="flex h-screen flex-col bg-green-900 text-white overflow-hidden">
+	<!-- Navbar prend sa place naturellement -->
+	<Navbar />
 
-<div class="relative flex min-h-screen flex-col items-center bg-green-900 p-4 text-white">
-	<!-- Score top-right -->
-	<div class="absolute top-4 right-4 rounded bg-black/40 p-4 text-sm shadow">
-		<p>👤 Joueur : {$playerWins}</p>
-		<p>🧑‍⚖️ Croupier : {$dealerWins}</p>
-		<p>🧮 Manches : {$roundsPlayed} / 10</p>
+	<!-- Contenu principal, occupe tout le reste -->
+	<div class="flex-1 flex flex-col items-center justify-center overflow-hidden px-4 py-6">
+		<!-- Score -->
+		<div class="mb-4 self-end rounded bg-black/40 p-4 text-sm shadow">
+			<p>👤 Joueur : {$playerWins}</p>
+			<p>🧑‍⚖️ Croupier : {$dealerWins}</p>
+			<p>🧮 Manches : {$roundsPlayed} / 10</p>
 
-		{#if $gameEnded}
-			<p class="mt-2 rounded bg-yellow-400 p-2 font-bold text-black">
-				{#if $playerWins > $dealerWins}
-					🎉 Vous gagnez la partie !
-				{:else if $playerWins < $dealerWins}
-					😢 Le croupier remporte la partie.
-				{:else}
-					🤝 Match nul !
-				{/if}
-			</p>
+			{#if $gameEnded}
+				<p class="mt-2 rounded bg-yellow-400 p-2 font-bold text-black">
+					{#if $playerWins > $dealerWins}
+						🎉 Vous gagnez la partie !
+					{:else if $playerWins < $dealerWins}
+						😢 Le croupier remporte la partie.
+					{:else}
+						🤝 Match nul !
+					{/if}
+				</p>
 
-			<button
-				on:click={() => {
-					resetMatch();
-					winIncremented = false; // reset pour prochaine manche
-				}}
-				class="mt-2 rounded bg-white px-3 py-1 text-black hover:bg-gray-200"
-			>
-				Rejouer
-			</button>
+				<button
+					on:click={() => {
+						resetMatch();
+						winIncremented = false;
+					}}
+					class="mt-2 rounded bg-white px-3 py-1 text-black hover:bg-gray-200"
+				>
+					Rejouer
+				</button>
+			{/if}
+		</div>
+
+		<h1 class="mb-4 text-4xl font-bold">🃏 Blackjack en Solo</h1>
+
+		<DealerArea
+			cards={$dealerCards}
+			score={$dealerScore}
+			hidden={$dealerHidden}
+			isGameOver={$isGameOver}
+		/>
+
+		<PlayerArea
+			cards={$playerCards}
+			score={$playerScore}
+			isGameOver={$isGameOver}
+			onHit={hit}
+			onStand={stand}
+		/>
+
+		{#if $isGameOver}
+			<p class="mt-4 rounded bg-black/40 p-2 text-lg">{$statusMessage}</p>
 		{/if}
-	</div>
 
-	<h1 class="mb-6 text-4xl font-bold">🃏 Blackjack Multijoueur</h1>
-
-	<MultiPlayerArea />
-
-	<DealerArea
-		cards={$dealerCards}
-		score={$dealerScore}
-		hidden={$dealerHidden}
-		isGameOver={$isGameOver}
-	/>
-
-	<PlayerArea
-		cards={$playerCards}
-		score={$playerScore}
-		isGameOver={$isGameOver}
-		onHit={hit}
-		onStand={stand}
-	/>
-	
-	{#if $isGameOver}
-		<p class="mt-4 rounded bg-black/40 p-2 text-lg">{$statusMessage}</p>
-	{/if}
-
-	<button
+		<button
 			on:click={startNewGame}
-			class="rounded bg-yellow-500 px-3 mt-4 py-1 font-semibold text-black hover:bg-yellow-600"
+			class="mt-4 rounded bg-yellow-500 px-3 py-1 font-semibold text-black hover:bg-yellow-600"
 		>
 			Nouvelle Partie
 		</button>
-
+	</div>
 </div>

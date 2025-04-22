@@ -7,7 +7,6 @@ export const load: ServerLoad = async ({ locals }) => {
 		throw redirect(302, '/login');
 	}
 
-	// Optionnel : tu peux passer user au client si besoin
 	return {
 		user: locals.user
 	};
